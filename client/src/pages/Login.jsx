@@ -19,6 +19,7 @@ import {
 import { useLoginUserMutation, useRegisterUserMutation } from "@/features/api/authApi.js"
 import { Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
 const Login = () => {
@@ -47,6 +48,8 @@ const Login = () => {
         isSuccess:loginIsSuccess
     }] =  useLoginUserMutation()
 
+    const navigate = useNavigate();
+
     useEffect(()=>{
       if(registerIsSuccess && registerData) {
         toast.success(registerData.message || "SignUp Successfull")
@@ -56,6 +59,7 @@ const Login = () => {
       }
       if(loginIsSuccess && loginData) {
         toast.success(loginData.message || "Login Successfull")
+        navigate("/");
       }
       if(loginError){
         toast.error(loginData.data.message||"Login Failed")
@@ -82,18 +86,18 @@ const Login = () => {
 
 
   return (
-    <div className="flex w-full items-center justify-center"> 
+    <div className="flex w-full items-center justify-center mt-20"> 
     <Tabs defaultValue="account" className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="SignUp">SignUp</TabsTrigger>
+        <TabsTrigger value="SignUp">Sign Up</TabsTrigger>
         <TabsTrigger value="Login">Login</TabsTrigger>
       </TabsList>
       <TabsContent value="SignUp">
         <Card>
           <CardHeader>
-            <CardTitle>SignUp</CardTitle>
+            <CardTitle>Sign Up</CardTitle>
             <CardDescription>
-             Create a new account and click signup when you're done.
+             Create a new account and click sign up when you're done.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -135,7 +139,7 @@ const Login = () => {
                 <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin"/>Please Wait
                 </>
-            ): "SignUp"
+            ): "Sign Up"
             }
             </Button>
           </CardFooter>
