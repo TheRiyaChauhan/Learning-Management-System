@@ -21,21 +21,21 @@ import { toast } from 'sonner';
 import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-    const {user} = useSelector(store=>store.auth);
-    const [logoutUser, {data,isSuccess}] = useLogoutUserMutation();
+    const { user } = useSelector(store => store.auth);
+    const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
     const navigate = useNavigate();
 
-    const logoutHandler = async()=>{
+    const logoutHandler = async () => {
         await logoutUser();
     }
-    
 
-    useEffect(()=>{
-        if(isSuccess){
+
+    useEffect(() => {
+        if (isSuccess) {
             toast.success(data.message || "User Logged Out");
             navigate("/login")
         }
-    },[isSuccess])
+    }, [isSuccess])
 
     return (
         <div className='h-16 dark:bg-[#0A0A0A] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10'>
@@ -69,12 +69,12 @@ const Navbar = () => {
 
                                         <DropdownMenuItem>
                                             <Book />
-                                            <span><Link to ="my-learning">My Learning</Link></span>
+                                            <span><Link to="my-learning">My Learning</Link></span>
                                         </DropdownMenuItem>
 
                                         <DropdownMenuItem>
                                             <User />
-                                            <span><Link to ="profile">Edit Profile</Link></span>
+                                            <span><Link to="profile">Edit Profile</Link></span>
                                         </DropdownMenuItem>
 
                                         <DropdownMenuItem>
@@ -83,19 +83,26 @@ const Navbar = () => {
                                         </DropdownMenuItem>
 
                                     </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
+                                    {
+                                        user.role === "instructor" && (
+                                            <>
+                                                <DropdownMenuSeparator />
 
-                                    <DropdownMenuItem className="flex justify-center items-center">
-                                        <Button variant="outline" className="w-48">Dashboard</Button>
-                                    </DropdownMenuItem>
+                                                <DropdownMenuItem className="flex justify-center items-center">
+                                                    <Button variant="outline" className="w-48">Dashboard</Button>
+                                                </DropdownMenuItem>
+
+                                            </>
+                                        )
+                                    }
 
                                 </DropdownMenuContent>
 
                             </DropdownMenu>
                         ) : (
                             <div className="flex gap-2 items-center">
-                                <Button variant="outline" onClick = {()=>{navigate("/login")}}>Login</Button>
-                                <Button onClick = {()=>{navigate("/login")}}>SignUp</Button >
+                                <Button variant="outline" onClick={() => { navigate("/login") }}>Login</Button>
+                                <Button onClick={() => { navigate("/login") }}>SignUp</Button >
                             </div>
                         )
 
@@ -108,10 +115,10 @@ const Navbar = () => {
 
             {/* Mobile Device */}
             <div className='flex md:hidden justify-between items-center px-4 h-full'>
-            <h1 className='text-2xl font-bold'>ACADEMIX</h1>
-            <MobileNavbar/>
+                <h1 className='text-2xl font-bold'>ACADEMIX</h1>
+                <MobileNavbar />
             </div>
-           
+
 
         </div>
     )
@@ -125,30 +132,30 @@ const MobileNavbar = () => {
         <Sheet>
             <SheetTrigger asChild>
                 <Button className="rounded-full bg-gray-200 hover:bg-gray-500 " variant="outline">
-                    <Menu/>
+                    <Menu />
                 </Button>
             </SheetTrigger>
             <SheetContent className="flex flex-col">
                 <SheetHeader className="flex flex-row items-center justify-between mt-2">
                     <SheetTitle>ACADEMIX</SheetTitle>
-                    <DarkMode/>
+                    <DarkMode />
                 </SheetHeader>
-              <Separator className='mr-2'/>
-              <nav className='flex flex-col space-y-4'>
-              <Link to ="my-learning">My Learning</Link>
-              <Link to ="profile">Edit Profile</Link>
-                <p>Log Out</p>
-              </nav>
-              {
-                role === "instructor" && (
-                    <SheetFooter>
-                    <SheetClose asChild>
-                        <Button type="submit">Dashboard</Button>
-                    </SheetClose>
-                </SheetFooter>
-                )
-              }
-               
+                <Separator className='mr-2' />
+                <nav className='flex flex-col space-y-4'>
+                    <Link to="my-learning">My Learning</Link>
+                    <Link to="profile">Edit Profile</Link>
+                    <p>Log Out</p>
+                </nav>
+                {
+                    role === "instructor" && (
+                        <SheetFooter>
+                            <SheetClose asChild>
+                                <Button type="submit">Dashboard</Button>
+                            </SheetClose>
+                        </SheetFooter>
+                    )
+                }
+
             </SheetContent>
         </Sheet>
     )
