@@ -52,17 +52,17 @@ const Login = () => {
 
     useEffect(()=>{
       if(registerIsSuccess && registerData) {
-        toast.success(registerData.message || "SignUp Successfull")
+        toast.success(registerData?.message || "SignUp Successfull")
       }
       if(registerError){
-        toast.error(registerError.data.message||"SignUp Failed")
+        toast.error(registerError?.data?.message||"SignUp Failed")
       }
       if(loginIsSuccess && loginData) {
-        toast.success(loginData.message || "Login Successfull")
+        toast.success(loginData?.message || "Login Successfull")
         navigate("/");
       }
       if(loginError){
-        toast.error(loginError.data.message||"Login Failed")
+        toast.error(loginError?.data?.message||"Login Failed")
       }
     
     },[registerData,loginData,registerError,loginError,registerIsLoading,loginIsLoading])
@@ -80,6 +80,8 @@ const Login = () => {
     const handleRegisteration =async(type)=> {
         const inputData = type ==="signup"? signupInput : loginInput;
         const action = type ==="signup"? registerUser : loginUser;
+        console.log(inputData);
+        
         await action(inputData);
     }
 
