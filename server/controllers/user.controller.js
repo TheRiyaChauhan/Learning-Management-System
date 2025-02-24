@@ -142,6 +142,7 @@ try {
 // extracting publicId of old image from url to deslete it 
     if(user.photoUrl){
         const publicId = user.photoUrl.split("/").pop().split(".")[0];
+       
         deleteMedia(publicId);
     }
 

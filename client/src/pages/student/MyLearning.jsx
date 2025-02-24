@@ -4,7 +4,7 @@ import { CourseSkeleton } from './Courses';
 
 const MyLearning = () => {
     const isLoading = false;
-    const MyLearningCourses = [1,2,3]
+    const MyLearningCourses = []
   return (
     <div className='max-w-4xl mx-auto my-24 px-4 md:px-0'>
         <h1 className='font-bold text-2xl'>MY LEARNING</h1>
@@ -13,7 +13,7 @@ const MyLearning = () => {
                 isLoading?<MyLearningSkeleton /> : MyLearningCourses.length == 0 ? (<p className='text-lg text-center mt-20'>You are not enrolled in any course.</p>):(
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                         {
-                            MyLearningCourses.map((course,index)=><Course key={index} />)
+                            MyLearningCourses.map((course,index)=><Course key={index} course={course}/>)
                         }
                     </div>
                 )

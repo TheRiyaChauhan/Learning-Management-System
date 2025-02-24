@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import "quill/dist/quill.snow.css";
+
+
 
 const RichTextEditor =({input,setInput})=> {
   const handleChange=(content)=>{

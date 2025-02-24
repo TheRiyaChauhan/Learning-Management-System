@@ -44,7 +44,10 @@ const Navbar = () => {
 
                 <div className='flex items-center gap-2'>
                     <SchoolIcon size={30} />
+                    <Link to="/">
                     <h1 className='hidden md:block text-2xl font-bold'>ACADEMIX</h1>
+                    </Link>
+                   
                 </div>
 
                 {/* user icon and dark light mode icon */}

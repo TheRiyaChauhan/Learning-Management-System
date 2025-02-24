@@ -7,7 +7,7 @@ import RichTextEditor from '@/components/ui/RichTextEditor';
 import React, { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEditCourseMutation, useGetCourseByIdQuery } from '@/features/api/courseApi';
+import { useEditCourseMutation, useGetCourseByIdQuery, usePublishCourseMutation, useRemoveCourseMutation } from '@/features/api/courseApi';
 import { toast } from 'sonner';
 
 const CourseTab = () => {
@@ -25,8 +25,9 @@ const CourseTab = () => {
     const params = useParams();
     const courseId = params.courseId;
 
-    const {data:courseByIdData , isLoading:courseByIdLoading } = useGetCourseByIdQuery(courseId);
-    
+    const {data:courseByIdData , refetch } = useGetCourseByIdQuery(courseId);
+    const [publishCourse , {data:publishData}] = usePublishCourseMutation();
+
 
     useEffect(()=>{
         if(courseByIdData?.course){
@@ -50,6 +51,8 @@ const CourseTab = () => {
 
     
     const [editCourse , {data, isLoading, isSuccess, error} ] = useEditCourseMutation();
+
+    const [removeCourse , {data:courseRemoveData , isSuccess:courseRemoveSuccess , error:courseRemoveError}] = useRemoveCourseMutation()
 
 
     const changeEventHandler = (e) => {
@@ -84,6 +87,22 @@ const CourseTab = () => {
         await editCourse({formData,courseId})
     }
 
+    const publishStatusHandler = async(action)=>{
+          try {
+            const response = await publishCourse({courseId,query:action})
+            if(response.data){
+                refetch()
+                toast.success(response.data.message)
+            }
+          } catch (error) {
+            toast.error("Failed to change status of course")
+          }
+    }
+
+    const removeCourseHandler = async()=>{
+        await removeCourse(courseId)
+    }
+
     useEffect(()=>{
         if(isSuccess){
             toast.success(data?.message || "Course updates!")
@@ -93,7 +112,14 @@ const CourseTab = () => {
         }
     },[isSuccess,error])
     
-    const isPublished = true;
+    useEffect(()=>{
+        if(courseRemoveSuccess){
+            toast.success(courseRemoveData?.message )
+        }
+        if(courseRemoveError){
+            toast.error(courseRemoveError?.courseRemoveData?.message)
+        }
+    },[courseRemoveSuccess, courseRemoveError])
 
     return (
         <Card className="shadow-lg shadow-blue-500/50">
@@ -105,11 +131,12 @@ const CourseTab = () => {
                     </CardDescription>
                 </div>
                 <div className='space-x-2'>
-                    <Button
-                        className="!bg-transparent !border !border-blue-600 text-black  hover:!bg-blue-600 hover:!text-white cssVariables">
-                        {isPublished ? "Unpublish" : "Publish"}
+                    <Button disabled={courseByIdData?.course.lectures.length === 0}
+                     className="bg-blue-600" onClick={()=>publishStatusHandler(courseByIdData?.course.isPublished? "false" : "true")}
+                     >
+                        {courseByIdData?.course.isPublished? "Unpublish" : "Publish"}
                     </Button>
-                    <Button className="bg-blue-600">Remove Course</Button>
+                    <Button variant="destructive" onClick ={removeCourseHandler}>Remove Course</Button>
 
                 </div>
             </CardHeader>
