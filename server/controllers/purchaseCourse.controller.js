@@ -9,6 +9,7 @@ const razorpay = new Razorpay({
 })
 
 export const createOrder = async(req,res)=>{
+    try {
     const userId = req.id;
     const {courseId,price} = req.body;
 
@@ -19,16 +20,14 @@ export const createOrder = async(req,res)=>{
             message:"course already purchased."
         })
     }
-    
-    try {
-        const order = await razorpay.orders.create({
-            amount: price,
+        const order = razorpay.orders.create({
+            amount: price*100,
             currency: 'INR',
             payment_capture: 1
         })
-
-        res.status(200).json({message: "Order created Succesfully", order})
-        
+        order.then(async(order)=>{
+            res.status(200).json({order})
+        }) 
     } catch (error) {
         res.status(500).json({ message:error });
     }
@@ -54,7 +53,8 @@ export const verifyPayment = async(req,res)=>{
     .update(`${orderId}|${paymentId}`)
     .digest("hex");
 
-    if(generated_signature == signature){
+    try{
+        if((generated_signature === signature)){
         user.enrolledCourses.push(courseId);
         course.enrolledStudents.push(userId);
 
@@ -66,9 +66,10 @@ export const verifyPayment = async(req,res)=>{
             user
         })
     }
-    else{
+    }
+    catch(error){
          return res.status(400).json({
-            message:"payment not successful"
+            message: error || "payment not successful"
          })
     }
 
