@@ -17,10 +17,10 @@ endpoints: (builder)=>({
         })
     }),
     verifyPayment: builder.mutation({
-        query:({courseId, paymentId,signature,orderId}) =>({
+        query:(data) =>({
             url:"/verify",
             method:"POST",
-            body:{courseId, paymentId,signature,orderId}
+            body:data
         })
     })
 })
