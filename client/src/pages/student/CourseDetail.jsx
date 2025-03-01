@@ -16,13 +16,15 @@ import { userLoggedIn } from "@/features/authSlice";
 
 import { BadgeInfo, Currency, Lock, PlayCircle } from "lucide-react";
 import React, { useEffect } from "react";
+import ReactPlayer from "react-player";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.user);
 
@@ -44,7 +46,6 @@ const CourseDetail = () => {
       }
 
       if (isSuccess) {
-        console.log("Order Response:", orderData);
 
         const order_id = orderData?.order?.id; // Ensure order ID exists
 
@@ -95,9 +96,17 @@ const CourseDetail = () => {
     }
   };
   const purchased = courseData?.course?.enrolledStudents.includes(user?._id);
+
   if (courseLoading) {
     return <div>Loading...</div>;
   }
+
+  const handleContinueCourse = () => {
+    if(purchased){
+      navigate(`/course-progress/${courseId}`)
+    }
+  }
+
   return (
     <div className="mt-20 space-y-5">
       <div className="bg-blue-700 text-white ">
@@ -115,7 +124,7 @@ const CourseDetail = () => {
           </p>
           <div className="flex items-center gap-2 text-sm">
             <BadgeInfo size={16} />
-            <p>Last updated : {courseData?.course?.updatedAt}</p>
+            <p>Last updated : {courseData?.course?.updatedAt.split("T")[0]}</p>
           </div>
           <p>
             Students enrolled: {courseData?.course?.enrolledStudents.length}
@@ -126,7 +135,7 @@ const CourseDetail = () => {
       <div className="max-w-7xl mx-auto my-5 px-4 md:px-8 flex flex-col lg:flex-row justify-between gap-10">
         <div className="w-full lg:w-1/2 space-y-5">
           <h1 className="font-bold text-xl md:text-2xl">Description</h1>
-          <p className="text-sm">{courseData?.course?.description}</p>
+          <p className="text-sm" dangerouslySetInnerHTML={{__html:courseData?.course?.description}}/>
           <Card>
             <CardHeader>
               <CardTitle>Course Content</CardTitle>
@@ -149,14 +158,22 @@ const CourseDetail = () => {
         <div className="w-full lg:w-1/3">
           <Card>
             <CardContent className="p-4 flex flex-col">
-              <div className="w-full aspect-video mb-4">video</div>
+              <div className="w-full aspect-video mb-4">
+                <ReactPlayer 
+                width="100%"
+                height="100%"
+                url={courseData?.course.lectures[0].videoUrl}
+                controls={true}
+                />
+              </div>
               <h1>Lecture title</h1>
 
               <h1 className="text-lg md:text-xl font-semibold">Course Price</h1>
             </CardContent>
+            <hr/>
             <CardFooter className="flex justify-center p-4">
               {purchased ? (
-                <Button className="w-full">Continue Course</Button>
+                <Button className="w-full bg-green-500" onClick={handleContinueCourse}>Continue Course</Button>
               ) : (
                 <Button className="bg-blue-700" onClick={handlePayment}>
                   Buy Course
