@@ -166,9 +166,9 @@ const CourseDetail = () => {
                 controls={true}
                 />
               </div>
-              <h1>Lecture title</h1>
+              <h1>{courseData?.course.lectures[0].lectureTitle}</h1>
 
-              <h1 className="text-lg md:text-xl font-semibold">Course Price</h1>
+              <h1 className="text-lg md:text-xl font-semibold">{courseData?.course.coursePrice}₹</h1>
             </CardContent>
             <hr/>
             <CardFooter className="flex justify-center p-4">

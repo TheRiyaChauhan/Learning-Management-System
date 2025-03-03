@@ -76,3 +76,21 @@ export const verifyPayment = async(req,res)=>{
     
 }
 
+export const purchasedCourses = async (req, res) => {
+    try {
+        const purchasedCourses = await Course.find({
+            enrolledStudents: { $exists: true, $not: { $size: 0 } }
+        });
+
+        if (!purchasedCourses.length) {
+            return res.status(404).json({ message: "No purchased courses found" });
+        }
+
+        return res.status(200).json({ purchasedCourses });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message || "Internal Server Error" });
+    }
+};
+
+

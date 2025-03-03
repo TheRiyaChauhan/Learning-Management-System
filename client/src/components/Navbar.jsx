@@ -92,7 +92,7 @@ const Navbar = () => {
                                                 <DropdownMenuSeparator />
 
                                                 <DropdownMenuItem className="flex justify-center items-center">
-                                                    <Button variant="outline" className="w-48">Dashboard</Button>
+                                                    <Button variant="outline" className="w-48" onClick={()=>navigate("/admin/dashboard")}>Dashboard</Button>
                                                 </DropdownMenuItem>
 
                                             </>

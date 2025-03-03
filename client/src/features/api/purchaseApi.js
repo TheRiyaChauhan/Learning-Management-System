@@ -22,6 +22,12 @@ endpoints: (builder)=>({
             method:"POST",
             body:data
         })
+    }),
+    purchasedCourses: builder.query({
+        query:()=>({
+            url:"/purchased-course",
+            method:"GET"
+        })
     })
 })
 
@@ -29,5 +35,6 @@ endpoints: (builder)=>({
 
 export const {
    useCreateOrderMutation,
-   useVerifyPaymentMutation
+   useVerifyPaymentMutation,
+   usePurchasedCoursesQuery
 } = purchaseApi;

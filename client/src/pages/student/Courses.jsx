@@ -11,7 +11,7 @@ const Courses = () => {
    if(isError) return <h1>Some error occurred while fetching courses.</h1>
    
   return (
-    <div className='bg-gray-100'>
+    <div className='bg-gray-100 dark:bg-[#171717]'>
         <div className='mx-auto max-w-7xl p-6'>
             <h2 className='font-bold text-3xl text-center mb-10'>Our Courses</h2>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
