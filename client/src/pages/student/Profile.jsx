@@ -51,7 +51,7 @@ const Profile = () => {
     if(isLoading) return <h1>Profile is Loading ....</h1>
     const {user} = data || {};
   return (
-    <div className='mx-auto my-24 max-w-4xl px-4 bg-gray-100 rounded-2xl'>
+    <div className='mx-auto my-20 max-w-4xl px-4 bg-gray-100 rounded-2xl dark:bg-black p-5'>
         <h1 className='text-center text-2xl md:text-left font-bold'>MY PROFILE</h1>
         <div className='flex flex-col md:flex-row items-center md:items-start gap-8 my-5'>
             <div className='flex flex-col items-center'>

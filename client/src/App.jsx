@@ -19,6 +19,7 @@ import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
 import { AdminRoute, AuthenticatedUser, ProtectedRoute } from "./components/protectedRoutes";
 import { ThemeProvider } from "./components/ThemeProvider";
+import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
 
 const appRouter = createBrowserRouter([
   {
@@ -44,7 +45,7 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "course-progress/:courseId",
-        element: <ProtectedRoute><CourseProgress /></ProtectedRoute>
+        element: <ProtectedRoute><PurchaseCourseProtectedRoute><CourseProgress /></PurchaseCourseProtectedRoute></ProtectedRoute>
       },
       {
         path: "my-learning",

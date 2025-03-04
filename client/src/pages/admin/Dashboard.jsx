@@ -18,7 +18,7 @@ const Dashboard = () => {
   
   console.log(courseData);
 
- const totalRevenue = purchasedCourses.reduce((acc, element) => acc + (element?.amount || 0), 0);
+ const totalRevenue = purchasedCourses.reduce((acc, element) => acc + (element?.coursePrice*element?.enrolledStudents.length), 0);
 
 const totalSales = purchasedCourses.length;
 
@@ -61,7 +61,10 @@ const totalSales = purchasedCourses.length;
                 interval={0} // Display all labels
               />
               <YAxis stroke="#6b7280" />
-              <Tooltip formatter={(value, name) => [`₹${value}`, name]} />
+              <Tooltip formatter={(value, name) => [`₹${value}`, name]}
+                contentStyle={{ backgroundColor: "#fff", color: "#4a90e2", borderRadius: "8px" }} // Tooltip box color
+                
+                />
               <Line
                 type="monotone"
                 dataKey="price"

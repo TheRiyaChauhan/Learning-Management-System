@@ -87,7 +87,7 @@ const Navbar = () => {
 
                                     </DropdownMenuGroup>
                                     {
-                                        user.role === "instructor" && (
+                                        user?.role === "instructor" && (
                                             <>
                                                 <DropdownMenuSeparator />
 
@@ -118,7 +118,7 @@ const Navbar = () => {
 
             {/* Mobile Device */}
             <div className='flex md:hidden justify-between items-center px-4 h-full'>
-                <h1 className='text-2xl font-bold'>ACADEMIX</h1>
+                <h1 className='text-2xl font-bold'><Link to="/">ACADEMIX</Link></h1>
                 <MobileNavbar />
             </div>
 
@@ -130,30 +130,46 @@ const Navbar = () => {
 export default Navbar;
 
 const MobileNavbar = () => {
-    const role = "instructor";
+    const navigate = useNavigate();
+    const { user } = useSelector(store => store.auth);
+    const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
+   
+
+    const logoutHandler = async () => {
+        await logoutUser();
+    }
+
+
+    useEffect(() => {
+        if (isSuccess) {
+            toast.success(data.message || "User Logged Out");
+            navigate("/login")
+        }
+    }, [isSuccess])
+   
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button className="rounded-full bg-gray-200 hover:bg-gray-500 " variant="outline">
+                <Button className="rounded-full bg-gray-200 dark:bg-blue-900 hover:bg-gray-500 " variant="outline">
                     <Menu />
                 </Button>
             </SheetTrigger>
             <SheetContent className="flex flex-col">
                 <SheetHeader className="flex flex-row items-center justify-between mt-2">
-                    <SheetTitle>ACADEMIX</SheetTitle>
+                    <SheetTitle><Link to="/">ACADEMIX</Link></SheetTitle>
                     <DarkMode />
                 </SheetHeader>
                 <Separator className='mr-2' />
                 <nav className='flex flex-col space-y-4'>
                     <Link to="my-learning">My Learning</Link>
                     <Link to="profile">Edit Profile</Link>
-                    <p>Log Out</p>
+                    <p onClick={logoutHandler}>Log Out</p>
                 </nav>
                 {
-                    role === "instructor" && (
+                    user?.role === "instructor" && (
                         <SheetFooter>
                             <SheetClose asChild>
-                                <Button type="submit">Dashboard</Button>
+                                <Button type="submit" onClick={()=> navigate("/admin/dashboard")}>Dashboard</Button>
                             </SheetClose>
                         </SheetFooter>
                     )

@@ -60,7 +60,7 @@ const selectByPriceHandler = (selectedValue) => {
         <h1 className="font-semibold mb-2">CATEGORY</h1>
         {
             categories.map((category)=> (
-                <div>
+                <div className='space-x-2'>
                      <Checkbox id={category.id} onCheckedChange={() => handleCategoryChange(category.id)} />
                      <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                      {category.label}
