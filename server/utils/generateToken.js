@@ -5,5 +5,5 @@ export const generateToken = (user)=>{
         expiresIn:"1d",
     });
 
-    return token
+    return token;
 }

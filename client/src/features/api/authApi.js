@@ -1,5 +1,5 @@
 import {createApi,fetchBaseQuery} from "@reduxjs/toolkit/query/react"
-import { userLoggedIn, userLoggedOut } from "../authSlice";
+import { updateUser, userLoggedIn, userLoggedOut } from "../authSlice";
 
 const USER_API = `${import.meta.env.VITE_BASE_URL}/api/v1/user/`
 
@@ -7,7 +7,14 @@ export const authApi = createApi({
     reducerPath : "authApi",
     baseQuery:fetchBaseQuery({
         baseUrl:USER_API,
-        credentials:'include'
+        credentials:'include',
+        prepareHeaders: (headers, { getState }) => {
+            const token = getState().auth.token;
+            if(token){
+                headers.set('authorization', `Bearer ${token}`);
+            }
+            return headers;
+        },
     }),
     endpoints:(builder)=>({
         registerUser: builder.mutation({
@@ -26,7 +33,7 @@ export const authApi = createApi({
             async onQueryStarted(_,{queryFulfilled,dispatch}){
                 try {
                     const result = await queryFulfilled;
-                    dispatch(userLoggedIn({user:result.data.user}));
+                    dispatch(userLoggedIn(result.data));
                 } catch (error) {
                     console.log(error);
                 }
@@ -38,7 +45,7 @@ export const authApi = createApi({
                 url:"logout",
                 method:"GET"
             }),
-            async onQueryStarted(_,{queryFulfilled,dispatch}){
+            async onQueryStarted(_,{dispatch}){
                 try {
                     dispatch(userLoggedOut());
                 } catch (error) {
@@ -51,15 +58,14 @@ export const authApi = createApi({
                 url:"profile",
                 method:"GET"
             }),
-            async onQueryStarted(_,{queryFulfilled,dispatch}){
+            onQueryStarted: async(_,{queryFulfilled,dispatch}) => {
                 try {
                     const result = await queryFulfilled;
-                    dispatch(userLoggedIn({user:result.data.user}));
+                    dispatch(updateUser(result?.data?.user));
                 } catch (error) {
                     console.log(error);
                 }
             }
-    
           
         }),
         updateUser: builder.mutation({
