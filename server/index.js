@@ -24,7 +24,8 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
     origin:"https://academix-lms.netlify.app",
-    credentials:true
+    credentials:true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 }))
 
 app.use(morgan('dev'));
