@@ -17,7 +17,11 @@ import EditLecture from "./pages/admin/lecture/EditLecture";
 import CourseDetail from "./pages/student/CourseDetail";
 import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
-import { AdminRoute, AuthenticatedUser, ProtectedRoute } from "./components/protectedRoutes";
+import {
+  AdminRoute,
+  AuthenticatedUser,
+  ProtectedRoute,
+} from "./components/ProtectedRoutes";
 import { ThemeProvider } from "./components/ThemeProvider";
 import PurchaseCourseProtectedRoute from "./components/PurchaseCourseProtectedRoute";
 
@@ -37,33 +41,59 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "login",
-        element: <AuthenticatedUser><Login /></AuthenticatedUser>,
+        element: (
+          <AuthenticatedUser>
+            <Login />
+          </AuthenticatedUser>
+        ),
       },
       {
         path: "course-detail/:courseId",
-        element:  <ProtectedRoute><CourseDetail /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <CourseDetail />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "course-progress/:courseId",
-        element: <ProtectedRoute><PurchaseCourseProtectedRoute><CourseProgress /></PurchaseCourseProtectedRoute></ProtectedRoute>
+        element: (
+          <ProtectedRoute>
+            <PurchaseCourseProtectedRoute>
+              <CourseProgress />
+            </PurchaseCourseProtectedRoute>
+          </ProtectedRoute>
+        ),
       },
       {
         path: "my-learning",
-        element: <ProtectedRoute><MyLearning /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <MyLearning />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "profile",
-        element: <ProtectedRoute><Profile /></ProtectedRoute>,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
-        path:"course/search",
-        element:<SearchPage />
+        path: "course/search",
+        element: <SearchPage />,
       },
 
       // admin routes start from here
       {
         path: "admin",
-        element: <AdminRoute><Sidebar /></AdminRoute> ,
+        element: (
+          <AdminRoute>
+            <Sidebar />
+          </AdminRoute>
+        ),
         children: [
           {
             path: "dashboard",
@@ -99,7 +129,7 @@ function App() {
   return (
     <main>
       <ThemeProvider>
-      <RouterProvider router={appRouter} />
+        <RouterProvider router={appRouter} />
       </ThemeProvider>
     </main>
   );
