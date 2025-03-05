@@ -41,7 +41,6 @@ export const register = async(req,res)=>{
             message:"Account created successfully."
         })
 
-
     } 
     catch (error) {
         console.log(error);
@@ -86,8 +85,9 @@ export const login = async(req,res)=>{
 
       res.status(200).json({
         success: true,
-        message: `Welome ${user.name}`,
+        message: `Welcome ${user.name}`,
         user,
+        token,
       })
 
     } 
@@ -120,6 +120,7 @@ export const logout = async(_,res)=>{
 export const getUserProfile = async(req,res)=>{
     try {
        const userId = req.id;
+
        const user = await User.findById(userId).select("-password").populate("enrolledCourses")
        if(!user){
         return res.status(404).json({
@@ -129,7 +130,7 @@ export const getUserProfile = async(req,res)=>{
        }
        return res.status(200).json({
         success:true,
-        user
+        user,
        })
     } catch (error) {
         console.log(error);
