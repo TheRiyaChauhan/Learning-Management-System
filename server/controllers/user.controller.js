@@ -3,6 +3,12 @@ import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/generateToken.js";
 import { deleteMedia, uploadMedia } from "../utils/cloudinary.js";
 
+const cookieOptions = {
+    httpOnly:true,
+    expires: new Date(Date.now() + 7*24*60*60*1000),
+    secure:process.env.NODE_ENV === "production"
+}
+
 
 export const register = async(req,res)=>{
     try {
@@ -74,7 +80,15 @@ export const login = async(req,res)=>{
         })
       }
 
-      generateToken(res,user,`welcome back ${user.name}`);
+      const token = generateToken(user);
+
+      res.cookie("token", token, cookieOptions)
+
+      res.status(200).json({
+        success: true,
+        message: `Welome ${user.name}`,
+        user,
+      })
 
     } 
     catch (error) {
